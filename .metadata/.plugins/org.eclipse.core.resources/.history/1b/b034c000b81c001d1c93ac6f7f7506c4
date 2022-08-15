@@ -1,0 +1,74 @@
+package com.nprater.server.services;
+
+import java.util.Optional;
+
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+
+import com.nprater.server.models.LoginUser;
+import com.nprater.server.models.User;
+import com.nprater.server.repositories.UserRepository;
+
+@Service
+public class UserService {
+	private UserRepository userRepo;
+	
+	public UserService(UserRepository u) {
+		this.userRepo = u;
+	}
+	
+	//Registration
+	public User register(User newUser, BindingResult result) {
+		//check if email is already in use
+		if(userRepo.findByEmail(newUser.getEmail()).isPresent()) {
+			result.rejectValue("email","Unique","Email is already in use");
+		}
+		
+		//check to see if the password and confirmation password match
+		if(!newUser.getPassword().equals(newUser.getConfirmPassword())) {
+			result.rejectValue("confirm", "Matches","Passwords do not match");
+		}
+		
+		//check if there are any errors. If so, return null. Otherwise, hash the password and store the user.
+		if(result.hasErrors()) {
+			return null;
+		} else {
+			String hashed = BCrypt.hashpw(newUser.getPassword(), BCrypt.gensalt());
+			newUser.setPassword(hashed);
+			return userRepo.save(newUser);
+		}
+	}
+	
+	//Login
+	public User login(LoginUser newLogin, BindingResult result) {
+		//If there are any errors, then return null
+		if(result.hasErrors()) {
+			return null;
+		}
+		
+		//create an option user
+		Optional<User> potentialUser = userRepo.findByEmail(newLogin.getEmail());
+		
+		//see if optional user exists. If not, create invalid message and return null
+		if(!potentialUser.isPresent()) {
+			result.rejectValue("password","Unique", "Invalid email/password");
+			return null;
+		}
+		
+		//create user from potential user
+		User user = potentialUser.get();
+		
+		//check if the submitted password matches the stored, hashed password for the user
+		if(!BCrypt.checkpw(newLogin.getPassword(), user.getPassword())) {
+			result.rejectValue("password","Unique", "Invalid email/password");
+		}
+		
+		//if passwords didn't match, then return null with error message. Otherwise, return the user
+		if(result.hasErrors()) {
+			return null;
+		} else {
+			return user;
+		}
+	}
+}

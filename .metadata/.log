@@ -257,3 +257,114 @@ Binding(CTRL+SHIFT+/,
 
 !ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 09:24:37.972
 !MESSAGE executing callback sts4.classpath.AEsEZrZA SUCCESS [done]
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 09:56:51.329
+!MESSAGE ClasspathListenerHandler removeClasspathListener sts4.classpath.AEsEZrZA
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 09:56:51.329
+!MESSAGE unsubscribing from classpath changes: sts4.classpath.AEsEZrZA
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 09:56:51.329
+!MESSAGE subsribers = {}
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 09:56:51.330
+!MESSAGE ClasspathListenerHandler removeClasspathListener sts4.classpath.AEsEZrZA => OK
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 09:56:54.908
+!MESSAGE Entering DelegatingStreamConnectionProvider()
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 09:56:54.909
+!MESSAGE DelegatingStreamConnectionProvider classloader = org.eclipse.osgi.internal.loader.EquinoxClassLoader@7899d0a0[org.springframework.tooling.boot.ls:1.36.0.202206171137(id=567)]
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 09:56:54.909
+!MESSAGE SpringBootLanguageServer exists!
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 09:56:56.769
+!MESSAGE Boot LS startup time from start to initialized: 1858ms
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 09:56:56.820
+!MESSAGE ClasspathListenerHandler addClasspathListener sts4.classpath.NgzwxQmuisBatched = true
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 09:56:56.820
+!MESSAGE Setting up ClasspathListenerManager
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 09:56:56.821
+!MESSAGE Scheduling initial event for all projects ...
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 09:56:56.821
+!MESSAGE Scheduling initial event for all projects DONE
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 09:56:56.821
+!MESSAGE exists = true open = true => deleted = false
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 09:56:56.821
+!MESSAGE ClasspathListenerHandler addClasspathListener sts4.classpath.NgzwxQmu => OK
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 09:56:56.827
+!MESSAGE classpath=111 entries
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 09:56:56.830
+!MESSAGE buffering callback sts4.classpath.NgzwxQmu server false 111
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 09:56:56.831
+!MESSAGE executing callback sts4.classpath.NgzwxQmu 1 batched events
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 09:56:57.110
+!MESSAGE executing callback sts4.classpath.NgzwxQmu SUCCESS [done]
+
+!ENTRY org.eclipse.lsp4e 2 0 2022-08-15 11:11:20.260
+!MESSAGE Javadoc unavailable. Failed to obtain it.
+!STACK 0
+java.lang.InterruptedException
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:386)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2096)
+	at org.eclipse.lsp4e.jdt.LSJavaHoverProvider.getHoverInfo2(LSJavaHoverProvider.java:70)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:163)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
+	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 11:29:30.163
+!MESSAGE exists = true open = true => deleted = false
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 11:29:30.168
+!MESSAGE classpath=114 entries
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 11:29:30.172
+!MESSAGE buffering callback sts4.classpath.NgzwxQmu server false 114
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 11:29:30.172
+!MESSAGE executing callback sts4.classpath.NgzwxQmu 1 batched events
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 11:29:30.218
+!MESSAGE executing callback sts4.classpath.NgzwxQmu SUCCESS [done]
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 11:29:31.599
+!MESSAGE exists = true open = true => deleted = false
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 11:29:31.604
+!MESSAGE classpath=114 entries
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 11:29:31.608
+!MESSAGE buffering callback sts4.classpath.NgzwxQmu server false 114
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 11:29:31.609
+!MESSAGE executing callback sts4.classpath.NgzwxQmu 1 batched events
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 11:29:31.632
+!MESSAGE executing callback sts4.classpath.NgzwxQmu SUCCESS [done]
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 11:32:43.681
+!MESSAGE exists = true open = true => deleted = false
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 11:32:43.688
+!MESSAGE classpath=109 entries
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 11:32:43.692
+!MESSAGE buffering callback sts4.classpath.NgzwxQmu server false 109
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 11:32:43.692
+!MESSAGE executing callback sts4.classpath.NgzwxQmu 1 batched events
+
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2022-08-15 11:32:43.720
+!MESSAGE executing callback sts4.classpath.NgzwxQmu SUCCESS [done]

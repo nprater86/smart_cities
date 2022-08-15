@@ -1,0 +1,62 @@
+package com.nprater.server.services;
+
+import java.util.Optional;
+
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+
+import com.nprater.server.models.User;
+import com.nprater.server.repositories.UserRepository;
+
+@Service
+public class UserService {
+	private UserRepository userRepo;
+	
+	public UserService(UserRepository u) {
+		this.userRepo = u;
+	}
+	
+	public User register(User newUser, BindingResult result) {
+		if(userRepo.findByEmail(newUser.getEmail()).isPresent()) {
+			result.rejectValue("email","Unique","Email is already in use");
+		}
+		
+		if(!newUser.getPassword().equals(newUser.getConfirmPassword())) {
+			result.rejectValue("confirm", "Matches","Passwords do not match");
+		}
+		
+		if(result.hasErrors()) {
+			return null;
+		} else {
+			String hashed = BCrypt.hashpw(newUser.getPassword(), BCrypt.getsalt());
+			newUser.setPassword(hashed);
+			return userRepo.save(newUser);
+		}
+	}
+	
+	public User login(LoginUser newLogin, BindingResult result) {
+		if(result.hasErrors()) {
+			return null;
+		}
+		
+		Optional<User> potentialUser = userRepo.findByEmail(newLogin.getEmail());
+		
+		if(!potentialUser.isPresent()) {
+			result.rejectValue("password","Unique", "Invalid email/password");
+			return null;
+		}
+		
+		User user = potentialUser.get();
+		
+		if(!BCrypt.checkpw(newLogin.getPassword(), user.getPassword())) {
+			result.rejectValue("password","Unique", "Invalid email/password");
+		}
+		
+		if(result.hasErrors()) {
+			return null;
+		} else {
+			return user;
+		}
+	}
+}

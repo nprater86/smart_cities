@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {BrowserRouter, Switch, Route} from 'react-router-dom';
+import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
 import Registration from './components/Registration';
 import Login from './components/Login';
 import Navbar from './components/Navbar';
@@ -26,10 +26,12 @@ function App() {
     }
   });
 
+  const [loggedIn, setLoggedIn] = useState(true);
+
   return (
     <BrowserRouter>
       <div className="App">
-        <UserContext.Provider value={{user, setUser}}>
+        <UserContext.Provider value={{user, setUser, loggedIn, setLoggedIn}}>
           {/* if user is not logged in and stored in user, then navbar will not show */}
           {
             user != null ?
@@ -38,6 +40,13 @@ function App() {
           }
           <div className="container">
             <Switch>
+              <Route exact path="/">
+                {
+                  loggedIn ?
+                  <Redirect to="/dashboard" /> :
+                  <Redirect to="/login" />
+                }
+              </Route>
               <Route path="/registration">
                 <Registration />
               </Route>

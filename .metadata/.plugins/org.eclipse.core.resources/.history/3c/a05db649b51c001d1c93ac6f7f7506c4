@@ -1,0 +1,31 @@
+package com.nprater.server.controllers;
+
+import javax.validation.Valid;
+
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.nprater.server.models.User;
+import com.nprater.server.services.UserService;
+
+@RestController
+@RequestMapping("/api")
+public class UserController {
+	private UserService userService;
+	
+	public UserController(UserService u) {
+		this.userService = u;
+	}
+	
+	@PostMapping("/users")
+	public BindingResult register(@Valid User newUser, BindingResult result) {
+		userService.register(newUser, result);
+		if(result.hasErrors()) {
+			return result;
+		} else {
+			return result;
+		}
+	}
+}

@@ -1,0 +1,33 @@
+package com.nprater.server.apis;
+
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.nprater.server.models.User;
+import com.nprater.server.services.UserService;
+
+@RestController
+@RequestMapping("/api/users")
+@CrossOrigin(origins="http://localhost:3000")
+public class UserApi {
+	private UserService userService;
+	
+	public UserApi(UserService u) {
+		this.userService = u;
+	}
+	
+	@PostMapping("")
+	public String register(@RequestParam(value="newUser") User newUser, @RequestParam(value="city_id") Long city_id, BindingResult result) {
+		userService.register(newUser, city_id, result);
+		if(result.hasErrors()) {
+			return "Error!" + result;
+		} else {
+			return "Success!" + result;
+		}
+	}
+}

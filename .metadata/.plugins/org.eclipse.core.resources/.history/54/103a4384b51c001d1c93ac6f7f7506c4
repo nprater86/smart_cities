@@ -1,0 +1,19 @@
+package com.nprater.server.controllers;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.nprater.server.services.CityService;
+
+@RestController
+@RequestMapping("/api/cities")
+public class CityApi {
+	private final CityService cityService;
+	
+	public CityApi(CityService c) {
+		this.cityService = c;
+	}
+	
+	
+	
+}

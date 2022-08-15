@@ -1,0 +1,7 @@
+package com.nprater.server.controllers;
+
+@RestController
+@RequestMapping("/api/cities")
+public class CityController {
+	
+}
