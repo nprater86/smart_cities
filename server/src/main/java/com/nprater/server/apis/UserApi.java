@@ -1,35 +1,126 @@
 package com.nprater.server.apis;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import javax.validation.Valid;
 
-import org.springframework.validation.BindingResult;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nprater.server.jwt.JwtUtils;
+import com.nprater.server.models.City;
+import com.nprater.server.models.Role;
 import com.nprater.server.models.User;
-import com.nprater.server.services.UserService;
+import com.nprater.server.payload.request.LoginRequest;
+import com.nprater.server.payload.request.SignupRequest;
+import com.nprater.server.payload.response.JwtResponse;
+import com.nprater.server.payload.response.MessageResponse;
+import com.nprater.server.repositories.CityRepository;
+import com.nprater.server.repositories.RoleRepository;
+import com.nprater.server.repositories.UserRepository;
+import com.nprater.server.services.UserDetailsImpl;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins="http://localhost:3000")
+@CrossOrigin(origins="http://localhost:3000", maxAge = 3600)
 public class UserApi {
-	private UserService userService;
+	@Autowired
+	AuthenticationManager authenticationManager;
 	
-	public UserApi(UserService u) {
-		this.userService = u;
+	@Autowired
+	UserRepository userRepository;
+	
+	@Autowired
+	RoleRepository roleRepository;
+	
+	@Autowired
+	PasswordEncoder encoder;
+	
+	@Autowired
+	CityRepository cityRepo;
+	
+	@Autowired
+	JwtUtils jwtUtils;
+	
+	@PostMapping("/login")
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		String jwt = jwtUtils.generateJwtToken(authentication);
+		
+		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();		
+		List<String> roles = userDetails.getAuthorities().stream()
+				.map(item -> item.getAuthority())
+				.collect(Collectors.toList());
+		return ResponseEntity.ok(new JwtResponse(jwt, 
+												 userDetails.getId(), 
+												 userDetails.getUsername(), 
+												 userDetails.getEmail(), 
+												 roles));
 	}
 	
-	@PostMapping("")
-	public String register(@Valid @RequestBody User newUser, BindingResult result) {
-		System.out.println(newUser);
-		userService.register(newUser, newUser.getCity().getId(), result);
-		if(result.hasErrors()) {
-			return "Error!" + result;
-		} else {
-			return "Success!" + result;
+	@PostMapping("/register")
+	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Username is already taken!"));
 		}
+		
+		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Email is already in use!"));
+		}
+		
+		if (signUpRequest.getPassword() != signUpRequest.getConfirmPassword()) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Passwords do not match!"));
+		}
+		
+		// Create new user's account
+		User user = new User(signUpRequest.getUsername(),
+							 signUpRequest.getFirstName(),
+							 signUpRequest.getLastName(),
+							 signUpRequest.getEmail(),
+							 signUpRequest.getCity(),
+							 encoder.encode(signUpRequest.getPassword()));
+		
+		List<String> strRoles = signUpRequest.getRole();
+		List<Role> roles = new ArrayList<Role>();
+		
+		Optional<City> optionalCity = cityRepo.findById(user.getCity().getId());
+		
+		if(optionalCity.isPresent()) {
+			City city = optionalCity.get();
+			user.setCity(city);
+		}
+		
+		if (strRoles == null) {
+			Role userRole = roleRepository.findByName("ROLE_USER");
+			roles.add(userRole);
+		} else {
+			Role userRole = roleRepository.findByName("ROLE_ADMIN");
+			roles.add(userRole);
+		}
+		
+		user.setRoles(roles);
+		userRepository.save(user);
+		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
 }

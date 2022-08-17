@@ -1,0 +1,23 @@
+package com.nprater.server.services;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.nprater.server.repositories.CityRepository;
+import com.nprater.server.repositories.RoleRepository;
+import com.nprater.server.repositories.UserRepository;
+
+@Service
+public class UserService {
+	private UserRepository userRepo;
+	private CityRepository cityRepo;
+	private RoleRepository roleRepo;
+	private BCryptPasswordEncoder bCrypt;
+	
+	public UserService(UserRepository u, CityRepository c, RoleRepository r, BCryptPasswordEncoder b) {
+		this.userRepo = u;
+		this.cityRepo = c;
+		this.roleRepo = r;
+		this.bCrypt = b;
+	}
+}

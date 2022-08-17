@@ -1,0 +1,7 @@
+spring.datasource.url=jdbc:mysql://localhost:3306/smartcities_schema
+spring.datasource.username=root
+spring.datasource.password=root
+spring.jpa.hibernate.ddl-auto=update
+spring.mvc.hiddenmethod.filter.enabled=true
+nprater.app.jwtSecret= bezKoderSecretKey
+nprater.app.jwtExpirationMs= 86400000

@@ -1,0 +1,5 @@
+package com.nprater.server.jwt;
+
+public class AuthTokenFilter {
+
+}

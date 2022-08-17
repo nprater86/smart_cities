@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Form from "react-validation/build/form";
+import Input from "react-validation/build/input";
+import CheckButton from "react-validation/build/button";
+import { isEmail } from "validator";
 
 const Registration = () => {
   const [firstName, setFirstName] = useState();
   const [lastName, setLastName] = useState();
   const [email, setEmail] = useState();
-  const [userName, setUserName] = useState();
+  const [username, setUsername] = useState();
   const [city, setCity] = useState();
   const [cities, setCities] = useState([]);
   const [password, setPassword] = useState();
@@ -25,7 +29,7 @@ const Registration = () => {
   function onSubmitHandler(e) {
     e.preventDefault();
 
-    const newUser = { firstName, lastName, email, userName, password, confirmPassword, city: {id: city} };
+    const newUser = { firstName, lastName, email, username, password, confirmPassword, city: {id: city} };
 
     console.log(newUser);
 
@@ -44,22 +48,22 @@ const Registration = () => {
         <h1 className="display-4 text-center mt-5">Welcome to Smart Cities!</h1>
         <div className="w-50 m-auto p-5 border rounded text-start mt-5">
           <h1 className="display-6 mb-4">Register</h1>
-          <form onSubmit={e => onSubmitHandler(e)}>
+          <Form onSubmit={e => onSubmitHandler(e)}>
             <div className="mb-3">
               <label className="form-label">First Name:</label>
-              <input className="form-control" type="text" onChange={ (e) => setFirstName(e.target.value) }/>
+              <Input className="form-control" type="text" onChange={ (e) => setFirstName(e.target.value) } validations={[required]}/>
             </div>
             <div className="mb-3">
               <label className="form-label">Last Name:</label>
-              <input className="form-control" type="text" onChange={ (e) => setLastName(e.target.value) }/>
+              <Input className="form-control" type="text" onChange={ (e) => setLastName(e.target.value) }/>
             </div>
             <div className="mb-3">
               <label className="form-label">Email:</label>
-              <input className="form-control" type="email" onChange={ (e) => setEmail(e.target.value) }/>
+              <Input className="form-control" type="email" onChange={ (e) => setEmail(e.target.value) }/>
             </div>
             <div className="mb-3">
               <label className="form-label">User Name:</label>
-              <input className="form-control" type="text" onChange={ (e) => setUserName(e.target.value) }/>
+              <Input className="form-control" type="text" onChange={ (e) => setUsername(e.target.value) }/>
             </div>
             <div className="row mb-3">
               <div className="col-2">
@@ -75,19 +79,19 @@ const Registration = () => {
             </div>
             <div className="mb-3">
               <label className="form-label">Password:</label>
-              <input className="form-control" type="password" onChange={ (e) => setPassword(e.target.value) }/>
+              <Input className="form-control" type="password" onChange={ (e) => setPassword(e.target.value) }/>
             </div>
             <div className="mb-3">
               <label className="form-label">Confirm Password:</label>
-              <input className="form-control" type="password" onChange={ (e) => setConfirmPassword(e.target.value) }/>
+              <Input className="form-control" type="password" onChange={ (e) => setConfirmPassword(e.target.value) }/>
             </div>
             <div className="d-flex justify-content-end mb-3">
-              <input className="btn btn-primary" type="submit" value="Register" />
+              <Input className="btn btn-primary" type="submit" value="Register" />
             </div>
             <div className="d-flex justify-content-end">
               <a href="/login">Already Registered? Log in here.</a>
             </div>
-          </form>
+          </Form>
         </div>
       </div>
     }

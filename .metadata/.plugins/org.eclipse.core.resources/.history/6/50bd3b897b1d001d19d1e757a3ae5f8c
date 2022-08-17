@@ -1,0 +1,5 @@
+package com.nprater.server.payload.response;
+
+public class MessageResponse {
+
+}

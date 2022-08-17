@@ -1,0 +1,66 @@
+package com.nprater.server.services;
+
+import java.util.Optional;
+
+import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+
+import com.nprater.server.models.City;
+import com.nprater.server.models.User;
+import com.nprater.server.repositories.CityRepository;
+import com.nprater.server.repositories.RoleRepository;
+import com.nprater.server.repositories.UserRepository;
+
+@Service
+public class UserService {
+	private UserRepository userRepo;
+	private CityRepository cityRepo;
+	private RoleRepository roleRepo;
+	private BCryptPasswordEncoder bCrypt;
+	
+	public UserService(UserRepository u, CityRepository c, RoleRepository r, BCryptPasswordEncoder b) {
+		this.userRepo = u;
+		this.cityRepo = c;
+		this.roleRepo = r;
+		this.bCrypt = b;
+	}
+	
+	//save client with user role only
+	public void saveWithUserRole(User user) {
+		user.setPassword(bCrypt.encode(user.getPassword()));
+		user.setRoles(roleRepo.findByName("ROLE_USER"));
+		
+		Optional<City> optionalCity = cityRepo.findById(user.getCity().getId());
+		
+		if(optionalCity.isPresent()) {
+			City city = optionalCity.get();
+			user.setCity(city);
+			userRepo.save(user);
+		}
+	}
+	
+	//save client with admin role only
+	public void saveWithAdminRole(User user) {
+		user.setPassword(bCrypt.encode(user.getPassword()));
+		user.setRoles(roleRepo.findByName("ROLE_ADMIN"));
+		
+		Optional<City> optionalCity = cityRepo.findById(user.getCity().getId());
+		
+		if(optionalCity.isPresent()) {
+			City city = optionalCity.get();
+			user.setCity(city);
+			userRepo.save(user);
+		}
+	}
+	
+	public User findByEmail(String email) {
+		Optional<User> optionalUser = userRepo.findByEmail(email);
+		if(optionalUser.isPresent()) {
+			return optionalUser.get();
+		} else {
+			return null;
+		}
+	}
+}

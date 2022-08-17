@@ -18,9 +18,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="users")
@@ -29,32 +26,27 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotEmpty(message="Username is required!")
-	@Size(min=3, max=30, message="Username must be between 3 and 30 characters")
-	private String userName;
+	private String username;
 	
-	@NotEmpty(message="First name is required")
-	@Size(min=2, message="First name must be at least 2 characters")
 	private String firstName;
 	
-	@NotEmpty(message="Last name is required")
-	@Size(min=2, message="Last name must be at least 2 characters")
 	private String lastName;
 	
-	@NotEmpty(message="Email is required")
-	@Email(message="Please enter a valid email")
 	private String email;
 	
-	@NotEmpty(message="Password is required")
-	@Size(min=8, message="Password must be at least 8 characters")
 	private String password;
 	
 	@Transient
-	@NotEmpty(message="Password confirmation is required")
-	@Size(min=8, message="Password confirmation must be at least 8 characters")
 	private String confirmPassword;
 	
-	private boolean isAdmin;
+	//For Authentication
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+			name = "users_roles",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id")
+	)
+	private List<Role> roles;
 	
 	@Column(updatable=false)
 	private Date createdAt;
@@ -87,6 +79,14 @@ public class User {
 	public User() {
 	}
 	
+	public User(String username, String firstName, String lastName, String email, City city, String password) {
+		this.username = username;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+	}
+	
 	@PrePersist
 	protected void onCreate() {
 		this.createdAt = new Date();
@@ -106,12 +106,12 @@ public class User {
 		this.id = id;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsername(String userName) {
+		this.username = userName;
 	}
 
 	public String getFirstName() {
@@ -170,14 +170,6 @@ public class User {
 		this.updatedAt = updatedAt;
 	}
 
-	public boolean isAdmin() {
-		return isAdmin;
-	}
-
-	public void setAdmin(boolean isAdmin) {
-		this.isAdmin = isAdmin;
-	}
-
 	public City getCity() {
 		return city;
 	}
@@ -208,5 +200,13 @@ public class User {
 
 	public void setDownvotedProjects(List<Project> downvotedProjects) {
 		this.downvotedProjects = downvotedProjects;
+	}
+
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
 	}
 }

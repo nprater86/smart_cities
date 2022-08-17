@@ -1,0 +1,5 @@
+package com.nprater.server.repositories;
+
+public interface RoleRepository {
+
+}
